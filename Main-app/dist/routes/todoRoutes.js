@@ -15,14 +15,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const Todo_1 = __importDefault(require("../models/Todo"));
 const router = express_1.default.Router();
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const todos = yield Todo_1.default.find();
-    res.json(todos);
+router.get('/todos', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const todos = yield Todo_1.default.find();
+        res.json(todos);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 }));
-router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const todos = yield Todo_1.default.find();
+        res.json(todos);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}));
+router.post('/todos', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('Received POST request for creating a new todo');
+    const ID = Math.floor(Math.random() * 1000);
     const { title, description, status, startDate, endDate } = req.body;
     const todo = new Todo_1.default({
+        ID,
         title,
         description,
         status,
@@ -32,21 +50,21 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield todo.save();
     res.json(todo);
 }));
-router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/todos/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, description, status, startDate, endDate } = req.body;
     const { id } = req.params;
-    const todo = yield Todo_1.default.findByIdAndUpdate(id, {
+    const todo = yield Todo_1.default.findByIdAndUpdate({ _id: id }, {
         title,
         description,
         status,
         startDate,
         endDate
     });
-    res.json('todo updataed successfully');
+    res.json('todo updated successfully');
 }));
-router.delete(':/id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/todos/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    yield Todo_1.default.findByIdAndDelete(id);
+    yield Todo_1.default.findByIdAndDelete({ _id: id });
     res.json('todo deleted successfully');
 }));
 exports.default = router;

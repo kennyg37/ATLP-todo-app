@@ -12,8 +12,9 @@ const PORT = process.env.PORT || 3000;
 mongoose_1.default.connect('mongodb://localhost:27017/todos');
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
-app.use('/todos', todoRoutes_1.default);
+app.use('/', todoRoutes_1.default);
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
+exports.default = app;
 //# sourceMappingURL=index.js.map

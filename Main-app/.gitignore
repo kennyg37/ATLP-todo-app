@@ -17,7 +17,7 @@ node_modules
 jspm_packages/
 
 # Ignore dist directory
-dist/
+/dist/
 
 # Ignore environment file
 .env

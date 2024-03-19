@@ -11,8 +11,10 @@ mongoose.connect('mongodb://localhost:27017/todos');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/todos', todoRoutes);
+app.use('/', todoRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
+
+export default app;

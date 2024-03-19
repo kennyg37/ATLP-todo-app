@@ -3,15 +3,32 @@ import Todo from '../models/Todo';
 
 const router = express.Router();
 
+router.get('/todos', async (req: Request, res: Response) => {
+    try {
+        const todos = await Todo.find();
+        res.json(todos);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 router.get('/', async (req: Request, res: Response) => {
-    const todos = await Todo.find();
-    res.json(todos);
+    try {
+        const todos = await Todo.find();
+        res.json(todos);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/todos', async (req: Request, res: Response) => {
     console.log('Received POST request for creating a new todo');
+
+    const ID = Math.floor(Math.random() * 1000);
     const { title, description, status, startDate, endDate } = req.body;
     const todo = new Todo({
+        ID,
         title,
         description,
         status,
@@ -22,22 +39,22 @@ router.post('/', async (req: Request, res: Response) => {
     res.json(todo);
 });
 
-router.put('/:id', async (req: Request, res: Response) => {
+router.put('/todos/:id', async (req: Request, res: Response) => {
     const { title, description, status, startDate, endDate } = req.body;
     const { id } = req.params;
-    const todo = await Todo.findByIdAndUpdate(id, {
+    const todo = await Todo.findByIdAndUpdate({_id: id}, {
         title,
         description,
         status,
         startDate,
         endDate
     });
-    res.json('todo updataed successfully'); 
+    res.json('todo updated successfully'); 
 });
 
-router.delete(':/id', async (req: Request, res: Response) => {
+router.delete('/todos/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
-    await Todo.findByIdAndDelete(id);
+    await Todo.findByIdAndDelete({_id: id});
     res.json('todo deleted successfully');
 });
 
