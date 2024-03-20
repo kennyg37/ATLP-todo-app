@@ -1,22 +1,21 @@
 import express, { Request, Response } from 'express';
 import Auth from "../models/auth"
 import bcrypt, { hash } from 'bcrypt';
-import exp from 'constants';
 
 const router = express.Router();
 
-router.get('/auth', async (req: Request, res: Response)=> {
+router.get('/auth/data', async (req: Request, res: Response)=> {
     const info = await Auth.find();
     res.json(info);
 
 })
-router.get ('/auth/:id', async(req: Request, res: Response)=> {
+router.get ('/auth/data/:id', async(req: Request, res: Response)=> {
     const {id} = req.params
     const infoData = await Auth.findById({_id: id});
     res.json(infoData);
 })
 
-router.post('/auth', async(req: Request, res:Response)=> {
+router.post('/auth/data', async(req: Request, res:Response)=> {
     console.log('Post request made')
     const {username, email, password} = req.body;
     const saltrounds = 10; 
@@ -30,8 +29,30 @@ router.post('/auth', async(req: Request, res:Response)=> {
     res.json(info)
 
 });
+router.post('/auth/login', async (req: Request, res: Response) => {
+    const { username, password } = req.body;
 
-router.put('/auth/:id', async(req: Request, res:Response) => {
+    try {
+        const user = await Auth.findOne({ username });
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid username or password' });
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (passwordMatch) {
+            return res.json({ message: 'Login successful' });
+        } else {
+            return res.status(401).json({ message: 'Invalid username or password' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.put('/auth/data/:id', async(req: Request, res:Response) => {
     const{id} = req.params;
     const {username, email, password} = req.body;
     const saltrounds = 10;
@@ -55,7 +76,7 @@ router.put('/auth/:id', async(req: Request, res:Response) => {
     }
 })
 
-router.delete('/auth/:id', async (req: Request, res: Response) => {
+router.delete('/auth/data/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
