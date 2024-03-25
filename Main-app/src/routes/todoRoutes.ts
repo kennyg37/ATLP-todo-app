@@ -1,8 +1,22 @@
 import express, { Request, Response } from 'express';
 import Todo from '../models/Todo';
+import verifyToken from '../middleware/authMiddleware';
 
 const router = express.Router();
 
+router.use(verifyToken);
+
+/**
+ * @swagger
+ * /api/todos:
+ *   get:
+ *     summary: Get all todos
+ *     responses:
+ *       200:
+ *         description: A list of todos
+ *       404:
+ *         description: Todos not found
+ */
 router.get('/todos', async (req: Request, res: Response) => {
     try {
         const todos = await Todo.find();
@@ -12,6 +26,7 @@ router.get('/todos', async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 router.get('/', async (req: Request, res: Response) => {
     try {
         const todos = await Todo.find();
@@ -21,7 +36,17 @@ router.get('/', async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
+/**
+ * @swagger
+ * /api/todos:
+ *   post:
+ *     summary: Add a new todo
+ *     responses:
+ *       200:
+ *         description: todo added successfully
+ *       404:
+ *         description: couldn't add todo
+ */
 router.post('/todos', async (req: Request, res: Response) => {
     console.log('Received POST request for creating a new todo');
 
@@ -38,7 +63,17 @@ router.post('/todos', async (req: Request, res: Response) => {
     await todo.save();
     res.json(todo);
 });
-
+/**
+ * @swagger
+ * /api/todos:
+ *   put:
+ *     summary: modify todo
+ *     responses:
+ *       200:
+ *         description: Todo modified successfully
+ *       404:
+ *         description: Couldn't find todo
+ */
 router.put('/todos/:id', async (req: Request, res: Response) => {
     const { title, description, status, startDate, endDate } = req.body;
     const { id } = req.params;
@@ -49,9 +84,20 @@ router.put('/todos/:id', async (req: Request, res: Response) => {
         startDate,
         endDate
     });
-    res.json('todo updated successfully'); 
+    res.json('todo updated successfully');
+    res.json(todo)
 });
-
+/**
+ * @swagger
+ * /api/todos:
+ *   delete:
+ *     summary: delete todo
+ *     responses:
+ *       200:
+ *         description: todo deleted successfully
+ *       404:
+ *         description: Todo couldn't be deleted
+ */
 router.delete('/todos/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     await Todo.findByIdAndDelete({_id: id});
