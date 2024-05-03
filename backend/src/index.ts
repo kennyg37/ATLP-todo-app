@@ -10,7 +10,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost:27017/todos');
+mongoose.connect('mongodb+srv://kalisaken8:ganzaken8@atlp-todo.ridedk4.mongodb.net/todos');
 const todoOptions = {
     definition: {
       openapi: '3.0.0',
