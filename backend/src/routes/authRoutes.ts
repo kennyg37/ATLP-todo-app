@@ -57,14 +57,25 @@ router.post('/data', async(req: Request, res:Response)=> {
     console.log('Post request made')
     const {username, email, password} = req.body;
     const saltrounds = 10; 
-    const hashedPassword = await bcrypt.hash(password, saltrounds);
+    let hashedPassword;
+    try {
+        hashedPassword = await hash(password, saltrounds);
+    } catch (error) {
+        res.json({message: 'Password is required'})
+    }
+    const confirmPassword = password;
     const info = new Auth({
         username,
         email,
         password: hashedPassword,
+        confirmPassword: hashedPassword,
     })
-    await info.save();
-    res.json(info)
+    if (password !== confirmPassword) {
+        res.json({message: 'Passwords do not match'})        
+    } else {
+        await info.save();
+        res.json(info);
+    }
 
 });
 
