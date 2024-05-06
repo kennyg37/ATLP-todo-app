@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import mongoose, { Document } from 'mongoose';
 import bodyParser from 'body-parser';
 import todoRoutes from './routes/todoRoutes';
@@ -35,7 +35,7 @@ const todoOptions = {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/api', verifyToken, todoRoutes);
+app.use('/api', todoRoutes);
 app.use('/auth', authRoutes);
 
 const specs = swaggerJSDoc(todoOptions);

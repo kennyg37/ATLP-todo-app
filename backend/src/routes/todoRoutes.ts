@@ -1,10 +1,8 @@
 import express, { Request, Response } from 'express';
 import Todo from '../models/Todo';
-import verifyToken from '../middleware/authMiddleware';
+import {verifyToken} from '../middleware/authMiddleware';
 
 const router = express.Router();
-
-router.use(verifyToken);
 
 /**
  * @swagger
@@ -17,7 +15,7 @@ router.use(verifyToken);
  *       404:
  *         description: Todos not found
  */
-router.get('/todos', async (req: Request, res: Response) => {
+router.get('/todos/data', async (req: Request, res: Response) => {
     try {
         const todos = await Todo.find();
         res.json(todos);
@@ -27,18 +25,9 @@ router.get('/todos', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/', async (req: Request, res: Response) => {
-    try {
-        const todos = await Todo.find();
-        res.json(todos);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 /**
  * @swagger
- * /api/todos:
+ * /api/todos/create:
  *   post:
  *     summary: Add a new todo
  *     responses:
@@ -47,7 +36,7 @@ router.get('/', async (req: Request, res: Response) => {
  *       404:
  *         description: couldn't add todo
  */
-router.post('/todos', async (req: Request, res: Response) => {
+router.post('/todos/create', verifyToken, async (req: Request, res: Response) => {
     console.log('Received POST request for creating a new todo');
 
     const ID = Math.floor(Math.random() * 1000);
