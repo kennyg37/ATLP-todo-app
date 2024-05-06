@@ -3,6 +3,7 @@ import './login.css';
 
 const Login: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   const sendLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,7 +30,7 @@ const Login: React.FC = () => {
         localStorage.setItem('token', data.token);
         setToken(data.token);
         console.log('Login successful');
-        HTMLFormElement.prototype.reset.call(event.currentTarget);
+        formRef.current?.reset();
       } else {
         console.log('Login failed');
       }

@@ -1,0 +1,19 @@
+.todo-container  {
+    padding-left: 2rem;
+}
+
+.todo-container h2 {
+    text-align: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.todo-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 2rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    width: fit-content;
+}

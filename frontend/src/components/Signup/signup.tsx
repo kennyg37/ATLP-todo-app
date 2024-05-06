@@ -1,8 +1,8 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import './signup.css';
 
 const Signup: React.FC = () => {
-  const sendSignup = async (event: React.FormEvent<HTMLFormElement>) => {
+  const sendSignup = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const email = formData.get('email') as string;
@@ -29,6 +29,7 @@ const Signup: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('Signup successful');
+        console.log(data);
         HTMLFormElement.prototype.reset.call(event.currentTarget);
       } else {
         console.log('Signup failed');
