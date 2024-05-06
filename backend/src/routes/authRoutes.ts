@@ -56,7 +56,9 @@ router.get ('/data/:id', async(req: Request, res: Response)=> {
 router.post('/data', async(req: Request, res:Response)=> {
     console.log('Post request made')
     const {username, email, password} = req.body;
-    const saltrounds = 10; 
+    
+    try {
+        const saltrounds = 10; 
     let hashedPassword;
     try {
         hashedPassword = await hash(password, saltrounds);
@@ -76,7 +78,11 @@ router.post('/data', async(req: Request, res:Response)=> {
         await info.save();
         res.json(info);
     }
-
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 /**
