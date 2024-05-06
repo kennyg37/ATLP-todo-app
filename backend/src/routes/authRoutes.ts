@@ -53,7 +53,7 @@ router.get ('/data/:id', async(req: Request, res: Response)=> {
  *         description: couldn't add user data
  */
 
-router.post('/data', async(req: Request, res:Response)=> {
+router.post('/signup', async(req: Request, res:Response)=> {
     console.log('Post request made')
     const {username, email, password} = req.body;
     
