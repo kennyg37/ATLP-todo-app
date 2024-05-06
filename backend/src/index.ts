@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import verifyToken from './middleware/authMiddleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,6 +35,11 @@ const todoOptions = {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use('/api', todoRoutes);
 app.use('/auth', authRoutes);
